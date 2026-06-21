@@ -40,38 +40,49 @@ function ChampionPrediction() {
   const showForm = !existingPrediction || isEditing
 
   return (
-    <div className="border rounded px-3 py-2 max-w-sm w-full">
-      <p className="text-xs text-gray-500 mb-2">
-        Puedes cambiar tu predicción de campeón mientras dure la fase de grupos.
-      </p>
-      {showForm ? (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <select
-            value={selectedTeamId}
-            onChange={(e) => setSelectedTeamId(e.target.value)}
-            className="border rounded px-3 py-2"
-            required
-          >
-            <option value="">Elige un equipo</option>
-            {teams.map((team) => (
-              <option key={team.id} value={team.id}>{team.name}</option>
-            ))}
-          </select>
-          <button type="submit" className="bg-blue-600 text-white rounded px-3 py-2">
-            {existingPrediction ? 'Guardar cambio' : 'Predecir campeón'}
-          </button>
-          {error && <p className="text-red-600 text-sm">{error}</p>}
-        </form>
-      ) : (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-600">
-            Tu predicción de campeón: {teams.find((t) => t.id === existingPrediction.team_id)?.name}
-          </p>
-          <button onClick={startEditing} className="text-blue-600 underline text-sm">
-            Editar
-          </button>
-        </div>
-      )}
+    <div className="w-56 shrink-0">
+      <div className="bg-[#0a0e1a] text-white px-3 py-2 rounded-t flex items-center gap-2">
+        <span>🏆</span>
+        <span className="text-xs font-bold uppercase">Campeón del Mundial</span>
+      </div>
+      <div className="border border-t-0 rounded-b px-3 py-3 flex flex-col gap-2">
+        <p className="text-xs text-gray-500">
+          Puedes cambiar tu predicción de campeón mientras dure la fase de grupos.
+        </p>
+        {showForm ? (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+            <select
+              value={selectedTeamId}
+              onChange={(e) => setSelectedTeamId(e.target.value)}
+              className="border rounded px-2 py-1 text-sm"
+              required
+            >
+              <option value="">Elige un equipo</option>
+              {teams.map((team) => (
+                <option key={team.id} value={team.id}>{team.name}</option>
+              ))}
+            </select>
+            <button type="submit" className="bg-[#1e40af] text-white rounded px-3 py-1 text-sm font-bold uppercase">
+              {existingPrediction ? 'Actualizar' : 'Predecir campeón'}
+            </button>
+            {error && <p className="text-red-600 text-xs">{error}</p>}
+          </form>
+        ) : (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <span>Tu campeón:</span>
+              <img
+                src={teams.find((t) => t.id === existingPrediction.team_id)?.flag}
+                alt=""
+                className="w-5 h-3.5 object-cover"
+              />
+              <span>{teams.find((t) => t.id === existingPrediction.team_id)?.name}</span>
+            </div>
+            <button onClick={startEditing} className="bg-[#1e40af] text-white rounded px-3 py-1 text-sm font-bold uppercase self-start">
+              Actualizar
+            </button>
+          </div>)}
+      </div>
     </div>
   )
 }

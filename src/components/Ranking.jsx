@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react'
 import { get } from '../api/client'
+import PageLayout from './PageLayout'
+
+const TOP_THREE_STYLES = {
+  1: { bg: 'bg-red-50', border: 'border-red-200', color: '#dc2626' },
+  2: { bg: 'bg-blue-50', border: 'border-blue-200', color: '#1e40af' },
+  3: { bg: 'bg-green-50', border: 'border-green-200', color: '#166534' },
+}
 
 function Ranking() {
   const [users, setUsers] = useState([])
@@ -19,22 +26,63 @@ function Ranking() {
   }
 
   return (
-    <table className="w-full max-w-md border-collapse">
-      <thead>
-        <tr className="border-b">
-          <th className="text-left py-2">Usuario</th>
-          <th className="text-right py-2">Puntos</th>
-        </tr>
-      </thead>
-      <tbody>
-        {users.map((user, index) => (
-          <tr key={user.id} className="border-b">
-            <td className="py-2">{index + 1}. {user.name}</td>
-            <td className="text-right py-2">{user.total_points}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <PageLayout>
+      <div className="max-w-md mx-auto border rounded overflow-hidden">
+        <div className="bg-[#0a0e1a] px-5 py-3 flex justify-between items-center">
+          <span className="font-display text-sm font-bold uppercase tracking-wide text-gray-400">Jugador</span>
+          <span className="font-display text-sm font-bold uppercase tracking-wide text-gray-400">Pts</span>
+        </div>
+        {users.map((user, index) => {
+          const position = index + 1
+          const isLeader = position === 1
+          const topStyle = TOP_THREE_STYLES[position]
+
+          return (
+            <div
+              key={user.id}
+              className={`flex items-center justify-between px-5 border-b last:border-b-0 ${
+                topStyle ? `${topStyle.bg} ${topStyle.border}` : ''
+              } ${isLeader ? 'py-4' : 'py-3'}`}
+            >
+              <div className="flex items-center gap-4">
+                <span
+                  className="font-display"
+                  style={{
+                    fontWeight: 900,
+                    fontSize: isLeader ? '26px' : topStyle ? '22px' : '14px',
+                    color: topStyle ? topStyle.color : '#9ca3af',
+                    width: '28px',
+                  }}
+                >
+                  {position}
+                </span>
+                <span
+                  className="font-display uppercase"
+                  style={{ fontWeight: isLeader ? 700 : 600, fontSize: isLeader ? '18px' : topStyle ? '16px' : '14px' }}
+                >
+                  {user.name}
+                </span>
+                {isLeader && (
+                  <span className="text-xs font-bold bg-[#dc2626] text-white px-2 py-0.5 rounded uppercase tracking-wide">
+                    Líder
+                  </span>
+                )}
+              </div>
+              <span
+                className="font-display"
+                style={{
+                  fontWeight: isLeader ? 700 : 600,
+                  fontSize: isLeader ? '20px' : topStyle ? '16px' : '14px',
+                  color: topStyle ? topStyle.color : undefined,
+                }}
+              >
+                {user.total_points}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </PageLayout>
   )
 }
 

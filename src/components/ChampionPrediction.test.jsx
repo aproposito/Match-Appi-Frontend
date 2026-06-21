@@ -29,14 +29,16 @@ describe('ChampionPrediction', () => {
     })
   })
 
-  it('muestra la predicción existente con opción de editar', async () => {
+  it('muestra la predicción existente con su bandera y opción de actualizar', async () => {
     mockGet([{ id: 1, user_id: 1, team_id: 22, points_champion: null }])
 
-    render(<ChampionPrediction />)
+    const { container } = render(<ChampionPrediction />)
 
     await waitFor(() => {
-      expect(screen.getByText('Tu predicción de campeón: España')).toBeInTheDocument()
-      expect(screen.getByText('Editar')).toBeInTheDocument()
+      expect(screen.getByText('Tu campeón:')).toBeInTheDocument()
+      expect(screen.getByText('España')).toBeInTheDocument()
+      expect(container.querySelector('img')).toHaveAttribute('src', 'https://flagcdn.com/es.svg')
+      expect(screen.getByRole('button', { name: 'Actualizar' })).toBeInTheDocument()
     })
   })
 
@@ -52,7 +54,8 @@ describe('ChampionPrediction', () => {
     fireEvent.click(screen.getByText('Predecir campeón'))
 
     await waitFor(() => {
-      expect(screen.getByText('Tu predicción de campeón: Portugal')).toBeInTheDocument()
+      expect(screen.getByText('Tu campeón:')).toBeInTheDocument()
+      expect(screen.getByText('Portugal')).toBeInTheDocument()
     })
   })
 
@@ -62,15 +65,15 @@ describe('ChampionPrediction', () => {
 
     render(<ChampionPrediction />)
 
-    await waitFor(() => screen.getByText('Editar'))
-    fireEvent.click(screen.getByText('Editar'))
+    await waitFor(() => screen.getByRole('button', { name: 'Actualizar' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Actualizar' }))
 
     fireEvent.change(screen.getByRole('combobox'), { target: { value: '37' } })
-    fireEvent.click(screen.getByText('Guardar cambio'))
+    fireEvent.click(screen.getByRole('button', { name: 'Actualizar' }))
 
     await waitFor(() => {
       expect(client.put).toHaveBeenCalledWith('/champion-predictions/1', { team_id: 37 })
-      expect(screen.getByText('Tu predicción de campeón: Portugal')).toBeInTheDocument()
+      expect(screen.getByText('Portugal')).toBeInTheDocument()
     })
   })
 
