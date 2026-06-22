@@ -47,7 +47,7 @@ function TeamList({ showCreateForm = false }) {
             <div className="bg-[#0a0e1a] px-5 py-3">
               <span className="font-display text-sm font-bold uppercase tracking-wide text-gray-400">Crear equipo</span>
             </div>
-            <form onSubmit={handleCreate} className="flex gap-2 px-5 py-4">
+            <form onSubmit={handleCreate} className="flex flex-col sm:flex-row gap-2 px-5 py-4">
               <input
                 type="text"
                 value={name}

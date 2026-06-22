@@ -38,7 +38,7 @@ function MatchList() {
 
   return (
     <PageLayout>
-      <div className="flex justify-between items-start gap-12">
+      <div className="flex flex-col-reverse md:flex-row md:justify-between items-start gap-6 w-full">
         <ul className="flex flex-col gap-3 max-w-md w-full mx-auto">
           {matches.map((match) => (
             <MatchCard key={match.id} match={match}>
