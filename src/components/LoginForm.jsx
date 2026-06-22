@@ -24,28 +24,39 @@ function LoginForm({ onLoginSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-sm">
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        className="border rounded px-3 py-2"
-        required
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Contraseña"
-        className="border rounded px-3 py-2"
-        required
-      />
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-      <button type="submit" className="bg-blue-600 text-white rounded px-3 py-2">
-        Entrar
-      </button>
-    </form>
+    <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+      <div className="text-4xl font-logo tracking-wide">
+        <span className="text-[#0a0e1a]">MATCH</span>
+        <span className="text-[#dc2626]">APP</span>
+      </div>
+      <div className="w-full border rounded overflow-hidden">
+        <div className="bg-[#0a0e1a] px-5 py-3">
+          <span className="font-display text-sm font-bold uppercase tracking-wide text-gray-400">Iniciar sesión</span>
+        </div>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 px-5 py-4">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            className="border rounded px-3 py-2 text-sm w-full"
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Contraseña"
+            className="border rounded px-3 py-2 text-sm w-full"
+            required
+          />
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+          <button type="submit" className="bg-[#166534] text-white rounded px-3 py-2 font-display text-sm font-bold uppercase">
+            Entrar
+          </button>
+        </form>
+      </div>
+    </div>
   )
 }
 
