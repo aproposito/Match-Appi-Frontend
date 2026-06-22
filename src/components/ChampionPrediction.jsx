@@ -68,20 +68,20 @@ function ChampionPrediction() {
             {error && <p className="text-red-600 text-xs">{error}</p>}
           </form>
         ) : (
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-xs text-gray-600">
-              <span>Tu campeón:</span>
-              <img
-                src={teams.find((t) => t.id === existingPrediction.team_id)?.flag}
-                alt=""
-                className="w-5 h-3.5 object-cover"
-              />
-              <span>{teams.find((t) => t.id === existingPrediction.team_id)?.name}</span>
-            </div>
-            <button onClick={startEditing} className="bg-[#1e40af] text-white rounded px-3 py-1 text-sm font-bold uppercase self-start">
+          <div className="flex flex-col items-center gap-3 py-2">
+            <img
+              src={teams.find((t) => t.id === existingPrediction.team_id)?.flag}
+              alt={teams.find((t) => t.id === existingPrediction.team_id)?.name}
+              className="w-9 h-6 object-cover shadow-sm"
+            />
+            <span className="font-display text-lg uppercase text-center" style={{ fontWeight: 600 }}>
+              {teams.find((t) => t.id === existingPrediction.team_id)?.name}
+            </span>
+            <button onClick={startEditing} className="bg-[#1e40af] text-white rounded px-3 py-1 text-xs font-bold uppercase font-display w-full">
               Actualizar
             </button>
-          </div>)}
+          </div>
+        )}
       </div>
     </div>
   )
