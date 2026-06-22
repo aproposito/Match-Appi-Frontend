@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { get, post, put } from '../api/client'
+import PageLayout from './PageLayout'
+import MatchCard from './MatchCard'
 
 function AdminMatches() {
   const [teams, setTeams] = useState([])
@@ -51,49 +53,54 @@ function AdminMatches() {
     }
   }
 
-  return (
-    <div className="flex flex-col gap-6">
-      <section>
-        <h2 className="font-bold mb-2">Crear partido</h2>
-        <form onSubmit={handleCreateMatch} className="flex flex-col gap-2 max-w-sm">
-          <select value={homeTeamId} onChange={(e) => setHomeTeamId(e.target.value)} className="border rounded px-3 py-2" required>
-            <option value="">Equipo local</option>
-            {teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}
-          </select>
-          <select value={awayTeamId} onChange={(e) => setAwayTeamId(e.target.value)} className="border rounded px-3 py-2" required>
-            <option value="">Equipo visitante</option>
-            {teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}
-          </select>
-          <select value={phase} onChange={(e) => setPhase(e.target.value)} className="border rounded px-3 py-2">
-            <option value="groups">Grupos</option>
-            <option value="round_of_16">Octavos</option>
-            <option value="quarters">Cuartos</option>
-            <option value="semis">Semis</option>
-            <option value="final">Final</option>
-          </select>
-          <input
-            type="datetime-local"
-            value={matchDateTime}
-            onChange={(e) => setMatchDateTime(e.target.value)}
-            className="border rounded px-3 py-2"
-            required
-          />
-          <button type="submit" className="bg-blue-600 text-white rounded px-3 py-2">
-            Crear partido
-          </button>
-        </form>
-      </section>
+  const selectClass = "border rounded px-3 py-2 font-display text-sm bg-white w-full"
 
-      <section>
-        <h2 className="font-bold mb-2">Partidos</h2>
-        {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
-        <ul className="flex flex-col gap-2 max-w-md">
+  return (
+    <PageLayout>
+      <div className="max-w-md mx-auto flex flex-col gap-6">
+        <section className="border rounded overflow-hidden">
+          <div className="bg-[#0a0e1a] px-5 py-3">
+            <span className="font-display text-sm font-bold uppercase tracking-wide text-gray-400">Crear partido</span>
+          </div>
+          <form onSubmit={handleCreateMatch} className="flex flex-col gap-3 px-5 py-4">
+            <select value={homeTeamId} onChange={(e) => setHomeTeamId(e.target.value)} className={selectClass} required>
+              <option value="">Equipo local</option>
+              {teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}
+            </select>
+            <select value={awayTeamId} onChange={(e) => setAwayTeamId(e.target.value)} className={selectClass} required>
+              <option value="">Equipo visitante</option>
+              {teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}
+            </select>
+            <select value={phase} onChange={(e) => setPhase(e.target.value)} className={selectClass}>
+              <option value="groups">Grupos</option>
+              <option value="round_of_16">Octavos</option>
+              <option value="quarters">Cuartos</option>
+              <option value="semis">Semis</option>
+              <option value="final">Final</option>
+            </select>
+            <input
+              type="datetime-local"
+              value={matchDateTime}
+              onChange={(e) => setMatchDateTime(e.target.value)}
+              className={selectClass}
+              required
+            />
+            <button type="submit" className="bg-[#166534] text-white rounded px-3 py-2 font-display text-sm font-bold uppercase">
+              Crear partido
+            </button>
+            {error && <p className="text-red-600 text-sm">{error}</p>}
+          </form>
+        </section>
+
+        <ul className="flex flex-col gap-3">
           {matches.map((match) => (
-            <MatchResultRow key={match.id} match={match} onSetResult={handleSetResult} />
+            <MatchCard key={match.id} match={match}>
+              <MatchResultRow match={match} onSetResult={handleSetResult} />
+            </MatchCard>
           ))}
         </ul>
-      </section>
-    </div>
+      </div>
+    </PageLayout>
   )
 }
 
@@ -107,15 +114,15 @@ function MatchResultRow({ match, onSetResult }) {
   }
 
   return (
-    <li className="border rounded px-3 py-2 flex items-center justify-between gap-2">
-      <span className="text-sm">{match.home_team.name} vs {match.away_team.name}</span>
-      <form onSubmit={handleSubmit} className="flex items-center gap-1">
-        <input type="number" min="0" value={homeGoals} onChange={(e) => setHomeGoals(e.target.value)} className="border rounded w-12 px-1 text-center" required />
-        <span>-</span>
-        <input type="number" min="0" value={awayGoals} onChange={(e) => setAwayGoals(e.target.value)} className="border rounded w-12 px-1 text-center" required />
-        <button type="submit" className="bg-gray-600 text-white rounded px-2 py-1 text-xs">Guardar</button>
-      </form>
-    </li>
+    <form onSubmit={handleSubmit} className="flex items-center justify-center gap-3">
+      <span className="text-xs font-bold uppercase text-gray-500 font-display" style={{ fontWeight: 600 }}>Resultado</span>
+      <input type="number" min="0" value={homeGoals} onChange={(e) => setHomeGoals(e.target.value)} className="border rounded w-14 px-2 py-1 text-center" required />
+      <span className="text-gray-400">—</span>
+      <input type="number" min="0" value={awayGoals} onChange={(e) => setAwayGoals(e.target.value)} className="border rounded w-14 px-2 py-1 text-center" required />
+      <button type="submit" className="bg-[#1e40af] text-white rounded px-3 py-1 text-xs font-bold uppercase">
+        Guardar
+      </button>
+    </form>
   )
 }
 

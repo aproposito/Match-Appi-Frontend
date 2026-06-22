@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { get, put, del } from '../api/client'
+import PageLayout from './PageLayout'
 
 function AdminUsers() {
   const [users, setUsers] = useState([])
@@ -24,14 +25,21 @@ function AdminUsers() {
   }
 
   return (
-    <div>
-      <h2 className="font-bold mb-2">Usuarios</h2>
-      <ul className="flex flex-col gap-2 max-w-lg">
-        {users.map((user) => (
-          <UserRow key={user.id} user={user} onUpdated={handleUpdated} onDeleted={handleDeleted} />
-        ))}
-      </ul>
-    </div>
+    <PageLayout>
+      <div className="max-w-lg mx-auto border rounded overflow-hidden">
+        <div className="bg-[#0a0e1a] px-5 py-3 grid grid-cols-[1fr_1fr_80px_120px] items-center gap-4">
+          <span className="font-display text-sm font-bold uppercase tracking-wide text-gray-400">Nombre</span>
+          <span className="font-display text-sm font-bold uppercase tracking-wide text-gray-400">Email</span>
+          <span className="font-display text-sm font-bold uppercase tracking-wide text-gray-400">Rol</span>
+          <span></span>
+        </div>
+        <ul>
+          {users.map((user) => (
+            <UserRow key={user.id} user={user} onUpdated={handleUpdated} onDeleted={handleDeleted} />
+          ))}
+        </ul>
+      </div>
+    </PageLayout>
   )
 }
 
@@ -66,37 +74,38 @@ function UserRow({ user, onUpdated, onDeleted }) {
 
   if (isEditing) {
     return (
-      <li className="border rounded px-3 py-2">
-        <form onSubmit={handleSave} className="flex flex-col gap-2">
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="border rounded px-2 py-1" required />
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded px-2 py-1" required />
+      <li className="border-t px-5 py-3">
+        <form onSubmit={handleSave} className="grid grid-cols-[1fr_1fr_80px_120px] items-center gap-4">
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="border rounded px-2 py-1 text-sm" required />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border rounded px-2 py-1 text-sm" required />
+          <span className="font-display text-sm uppercase text-gray-500" style={{ fontWeight: 600 }}>{user.role}</span>
           <div className="flex gap-2">
-            <button type="submit" className="bg-blue-600 text-white rounded px-2 py-1 text-sm">Guardar</button>
-            <button type="button" onClick={() => setIsEditing(false)} className="bg-gray-300 rounded px-2 py-1 text-sm">Cancelar</button>
+            <button type="submit" className="bg-[#1e40af] text-white rounded px-2 py-1 text-xs font-bold uppercase">Guardar</button>
+            <button type="button" onClick={() => setIsEditing(false)} className="bg-gray-200 text-gray-700 rounded px-2 py-1 text-xs font-bold uppercase">Cancelar</button>
           </div>
-          {error && <p className="text-red-600 text-sm">{error}</p>}
         </form>
+        {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
       </li>
     )
   }
 
   return (
-    <li className="border rounded px-3 py-2 flex items-center justify-between">
-      <div className="text-sm">
-        <span className="font-medium">{user.name}</span> · {user.email} · <span className="text-gray-500">{user.role}</span>
-      </div>
-      <div className="flex gap-2">
-        <button onClick={() => setIsEditing(true)} className="text-blue-600 underline text-sm">Editar</button>
+    <li className="border-t px-5 py-3 grid grid-cols-[1fr_1fr_80px_120px] items-center gap-4">
+      <span className="font-display text-sm uppercase" style={{ fontWeight: 600 }}>{user.name}</span>
+      <span className="text-sm text-gray-500 truncate">{user.email}</span>
+      <span className="font-display text-xs uppercase text-gray-400" style={{ fontWeight: 600 }}>{user.role}</span>
+      <div className="flex gap-3 items-center">
+        <button onClick={() => setIsEditing(true)} className="text-[#1e40af] text-sm font-bold uppercase font-display" style={{ fontWeight: 700 }}>Editar</button>
         {confirmingDelete ? (
           <>
-            <button onClick={handleDelete} className="text-red-700 text-sm">Confirmar</button>
-            <button onClick={() => setConfirmingDelete(false)} className="text-gray-500 text-sm">Cancelar</button>
+            <button onClick={handleDelete} className="text-[#dc2626] text-sm font-bold uppercase font-display" style={{ fontWeight: 700 }}>Confirmar</button>
+            <button onClick={() => setConfirmingDelete(false)} className="text-gray-400 text-sm">✕</button>
           </>
         ) : (
-          <button onClick={() => setConfirmingDelete(true)} className="text-red-700 underline text-sm">Eliminar</button>
+          <button onClick={() => setConfirmingDelete(true)} className="text-[#dc2626] text-sm font-bold uppercase font-display" style={{ fontWeight: 700 }}>Eliminar</button>
         )}
       </div>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && <p className="text-red-600 text-xs col-span-4">{error}</p>}
     </li>
   )
 }

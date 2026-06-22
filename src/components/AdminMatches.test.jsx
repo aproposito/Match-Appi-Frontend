@@ -29,13 +29,14 @@ function mockGet() {
 }
 
 describe('AdminMatches', () => {
-  it('muestra los partidos existentes', async () => {
+  it('muestra los partidos existentes con sus equipos', async () => {
     mockGet()
 
     render(<AdminMatches />)
 
     await waitFor(() => {
-      expect(screen.getByText('España vs Portugal')).toBeInTheDocument()
+      expect(screen.getAllByText('España').length).toBeGreaterThan(0)
+      expect(screen.getAllByText('Portugal').length).toBeGreaterThan(0)
     })
   })
 
@@ -81,12 +82,12 @@ describe('AdminMatches', () => {
 
     render(<AdminMatches />)
 
-    await waitFor(() => screen.getByText('España vs Portugal'))
+    await waitFor(() => screen.getAllByText('España'))
 
     const inputs = screen.getAllByRole('spinbutton')
     fireEvent.change(inputs[0], { target: { value: '2' } })
     fireEvent.change(inputs[1], { target: { value: '1' } })
-    fireEvent.click(screen.getByText('Guardar'))
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar' }))
 
     await waitFor(() => {
       expect(client.put).toHaveBeenCalledWith('/matches/1', { final_home_goals: 2, final_away_goals: 1 })

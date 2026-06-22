@@ -9,13 +9,12 @@ const teams = [
 ]
 
 describe('AdminTeams', () => {
-  it('muestra el título y los equipos existentes', async () => {
+  it('muestra los equipos existentes', async () => {
     vi.spyOn(client, 'get').mockResolvedValue({ data: teams })
 
     render(<AdminTeams />)
 
     await waitFor(() => {
-      expect(screen.getByText('Equipos')).toBeInTheDocument()
       expect(screen.getByText('España')).toBeInTheDocument()
       expect(screen.getByText('Portugal')).toBeInTheDocument()
     })
