@@ -1,1 +1,8 @@
+@import url('https://fonts.bunny.net/css?family=figtree:400,500,600|bebas-neue:400|barlow-condensed:600,700,900&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Barlow Condensed", sans-serif;
+  --font-logo: "Bebas Neue", sans-serif;
+  --font-sans: "Figtree", sans-serif;
+}
